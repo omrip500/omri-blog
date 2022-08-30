@@ -1,0 +1,39 @@
+{% include "header.html" %}
+
+  <!-- Page Header -->
+  <header class="masthead" style="background-image: url({{ url_for('static', filename='img/about-bg.jpg')}})">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="page-heading">
+            <h1>Blog users</h1>
+            <span class="subheading">Blog users panel.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mx-auto">
+      {% for user in users %}
+        {% if user.email != current_user.email %}
+          <p> {{user.name}} - {{ user.email }} </p>
+          {% if user.is_admin == 1 %}
+            <p>This user is admin</p>
+            <a href="{{url_for('set_or_remove_admin', user_id=user.id, mode='remove_admin')}}">Remove Being Admin</a>
+          {% else %}
+            <p>This user is not admin</p>
+            <a href="{{url_for('set_or_remove_admin', user_id=user.id, mode='make_admin')}}">Set Admin</a>
+          {% endif %}
+      {% endif %}
+          <hr>
+      {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <hr>

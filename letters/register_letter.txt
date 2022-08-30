@@ -1,0 +1,4 @@
+Hello [name],
+Thank you for register to our blog site.
+Wish you luck.
+Omri's Blog team.
