@@ -114,10 +114,9 @@ def get_all_posts():
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
-        email = form.email.data,
-        password = generate_password_hash(password=form.password.data, method="pbkdf2:sha256", salt_length=8),
+        email = form.email.data
+        password = generate_password_hash(password=form.password.data, method="pbkdf2:sha256", salt_length=8)
         name = form.name.data
-
 
         try:
             email = validate_email(email).email
