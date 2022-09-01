@@ -124,7 +124,7 @@ def register():
             flash("Invalid Email Address")
             return redirect(url_for('register'))
         else:
-            new_user = User(email, password, name)
+            new_user = User(email=email, password=password, name=name)
             check_if_exist = User.query.filter_by(email=form.email.data).first()
             if check_if_exist is not None:
                 flash("You've already signed up with that email, log in instead!")
