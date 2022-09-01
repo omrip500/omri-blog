@@ -259,8 +259,8 @@ def delete_post(post_id):
 @app.route("/users")
 @admin_required
 def users():
-    al_users = db.session.query(User).all()
-    return render_template("users.html", users=users[1::])
+    all_users = db.session.query(User).all()
+    return render_template("users.html", users=all_users[1::])
 
 @app.route("/set-or-remove-admin/<user_id>/<mode>")
 @admin_required
