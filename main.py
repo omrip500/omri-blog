@@ -136,7 +136,8 @@ def register():
                 login_user(new_user)
                 send_email_to_new_user(new_user)
                 return redirect(url_for('get_all_posts'))
-    return render_template("register.html", form=form)
+    else:
+        return render_template("register.html", form=form)
 
 
 @app.route('/login', methods=["GET", "POST"])
