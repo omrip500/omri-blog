@@ -12,6 +12,7 @@ from flask_gravatar import Gravatar
 from functools import wraps
 import smtplib
 import os
+from email_validator import validate_email, EmailNotValidError
 
 MY_EMAIL = "pythoncoursea@gmail.com"
 PASSWORD = "zftadfdvngefnegr"
@@ -113,21 +114,28 @@ def get_all_posts():
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
-        new_user = User(
-            email=form.email.data,
-            password=generate_password_hash(password=form.password.data, method="pbkdf2:sha256", salt_length=8),
-            name=form.name.data
-        )
-        check_if_exist = User.query.filter_by(email=form.email.data).first()
-        if check_if_exist is not None:
-            flash("You've already signed up with that email, log in instead!")
-            return redirect(url_for('login'))
+        email = form.email.data,
+        password = generate_password_hash(password=form.password.data, method="pbkdf2:sha256", salt_length=8),
+        name = form.name.data
+
+
+        try:
+            validate_email(email).email
+        except EmailNotValidError:
+            flash("Invalid Email Address")
+            return redirect(url_for('register'))
         else:
-            db.session.add(new_user)
-            db.session.commit()
-            login_user(new_user)
-            send_email_to_new_user(new_user)
-            return redirect(url_for('get_all_posts'))
+            new_user = User(email, password, name)
+            check_if_exist = User.query.filter_by(email=form.email.data).first()
+            if check_if_exist is not None:
+                flash("You've already signed up with that email, log in instead!")
+                return redirect(url_for('login'))
+            else:
+                db.session.add(new_user)
+                db.session.commit()
+                login_user(new_user)
+                send_email_to_new_user(new_user)
+                return redirect(url_for('get_all_posts'))
     return render_template("register.html", form=form)
 
 
