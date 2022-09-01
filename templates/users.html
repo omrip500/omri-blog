@@ -20,7 +20,7 @@
     <div class="row">
       <div class="col-lg-8 col-md-10 mx-auto">
       {% for user in users %}
-        {% if user.email != current_user.email and user.email != "omrip500@gmail.com" %}
+        {% if user.email != current_user.email %}
           <p> {{user.name}} - {{ user.email }} </p>
           {% if user.is_admin == 1 %}
             <p>This user is admin</p>
