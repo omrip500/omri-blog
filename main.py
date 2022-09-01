@@ -120,7 +120,7 @@ def register():
 
 
         try:
-            validate_email(email).email
+            email = validate_email(email).email
         except EmailNotValidError:
             flash("Invalid Email Address")
             return redirect(url_for('register'))
