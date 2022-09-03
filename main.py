@@ -106,7 +106,7 @@ def admin_required(f):
 def blog_owner_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        post = BlogPost.query.get(kwargs)
+        post = BlogPost.query.get(args[0])
         if post.author == current_user:
             return f(*args, **kwargs)
         return abort(403)
