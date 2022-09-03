@@ -6,7 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
-from flask_login import UserMixin, login_user, LoginManager, current_user, logout_user
+from flask_login import UserMixin, login_user, LoginManager, current_user, logout_user, login_required
 from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm
 from flask_gravatar import Gravatar
 from functools import wraps
@@ -101,6 +101,16 @@ def admin_required(f):
 
         return f(*args, **kwargs)
     return decorated_function
+
+
+def blog_owner_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        post = BlogPost.query.get(kwargs)
+        if post.author == current_user:
+            return f(*args, **kwargs)
+        return abort(403)
+    return decorated_function()
 
 
 
@@ -207,7 +217,7 @@ def contact():
 
 
 @app.route("/new-post", methods=["GET", "POST"])
-@admin_required
+@login_required
 def add_new_post():
     form = CreatePostForm()
     if form.validate_on_submit():
@@ -228,6 +238,7 @@ def add_new_post():
 
 @app.route("/edit-post/<int:post_id>", methods=["GET", "POST"])
 @admin_required
+@blog_owner_required
 def edit_post(post_id):
     post = BlogPost.query.get(post_id)
     edit_form = CreatePostForm(
