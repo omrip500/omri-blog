@@ -241,7 +241,7 @@ def add_new_post():
 @app.route("/edit-post/<int:post_id>", methods=["GET", "POST"])
 def edit_post(post_id):
     post = BlogPost.query.get(post_id)
-    if post.author != current_user or post.author != current_user and current_user.is_admin != 1:
+    if current_user.is_admin != 1 or post.author != current_user:
         return abort(403)
     edit_form = CreatePostForm(
         title=post.title,
