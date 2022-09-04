@@ -289,6 +289,13 @@ def set_or_remove_admin(user_id, mode):
     db.session.commit()
     return redirect(url_for('users'))
 
+@app.route("/delete-comment/<comment_id>")
+def delete_comment(comment_id, post_id):
+    comment_to_delete = BlogPost.query.get(comment_id)
+    db.session.delete(comment_to_delete)
+    db.session.commit()
+    return redirect(url_for('show_post', post_id=post_id))
+
 
 def send_email_to_new_user(user):
     with open("letters/register_letter.txt") as letter:
