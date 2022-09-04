@@ -36,9 +36,9 @@
 
 
 <!--           Comments Area -->
-          {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}) }}
           {{ ckeditor.load() }}
           {{ ckeditor.config(name='comment_text') }}
+          {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}) }}
 
 
           <div class="col-lg-8 col-md-10 mx-auto comment">
@@ -46,11 +46,12 @@
               <ul class="commentList">
                 <li>
                     <div class="commenterImage">
-                     <img src="{{ comment.comment_author.email | gravatar }}"/>
+                        <img src="{{ comment.comment_author.email | gravatar }}"/>
                     </div>
                     <div class="commentText">
                       <p>{{comment.text|safe}}</p>
                       <span class="date sub-text">{{comment.comment_author.name}}</span>
+
                     </div>
                 </li>
               </ul>
