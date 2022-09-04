@@ -93,22 +93,23 @@ class Comment(db.Model, Base):
 db.create_all()
 
 
-def admin_required(function):
-    @wraps(function)
+def admin_required(f):
+    @wraps(f)
     def decorated_function(*args, **kwargs):
         if current_user.is_anonymous or current_user.is_admin != 1:
             return abort(403)
 
-        return function(*args, **kwargs)
+        return f(*args, **kwargs)
     return decorated_function
 
 
-def blog_owner_required(function):
+def blog_owner_required(f):
+    @wraps(f)
     def decorated_function(*args, **kwargs):
         post_id = args[0]
         post = BlogPost.query.get(post_id)
         if post.author == current_user:
-            return function(*args, **kwargs)
+            return f(*args, **kwargs)
         return abort(403)
     return decorated_function
 
