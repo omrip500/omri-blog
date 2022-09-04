@@ -297,7 +297,7 @@ def delete_comment(post_id, comment_id):
         db.session.commit()
         return redirect(url_for('show_post', post_id=post_id))
 
-    return abort(304)
+    return abort(403)
 
 
 def send_email_to_new_user(user):
