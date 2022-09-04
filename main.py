@@ -111,7 +111,7 @@ def blog_owner_required(f):
         if post.author == current_user:
             return f(*args, **kwargs)
         return abort(403)
-    return decorated_function()
+    return decorated_function
 
 
 
@@ -238,8 +238,8 @@ def add_new_post():
 
 
 @app.route("/edit-post/<int:post_id>", methods=["GET", "POST"])
-@admin_required
-# @blog_owner_required
+# @admin_required
+@blog_owner_required
 def edit_post(post_id):
     post = BlogPost.query.get(post_id)
     edit_form = CreatePostForm(
