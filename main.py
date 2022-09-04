@@ -291,7 +291,7 @@ def set_or_remove_admin(user_id, mode):
 
 @app.route("/delete-comment/<post_id>/<comment_id>")
 def delete_comment(post_id, comment_id):
-    comment_to_delete = BlogPost.query.get(comment_id)
+    comment_to_delete = Comment.query.get(comment_id)
     db.session.delete(comment_to_delete)
     db.session.commit()
     return redirect(url_for('show_post', post_id=post_id))
