@@ -292,9 +292,12 @@ def set_or_remove_admin(user_id, mode):
 @app.route("/delete-comment/<post_id>/<comment_id>")
 def delete_comment(post_id, comment_id):
     comment_to_delete = Comment.query.get(comment_id)
-    db.session.delete(comment_to_delete)
-    db.session.commit()
-    return redirect(url_for('show_post', post_id=post_id))
+    if comment_to_delete.comment_author == current_user or current_user.is_admin == 1:
+        db.session.delete(comment_to_delete)
+        db.session.commit()
+        return redirect(url_for('show_post', post_id=post_id))
+
+    return abort(304)
 
 
 def send_email_to_new_user(user):
