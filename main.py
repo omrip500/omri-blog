@@ -103,15 +103,15 @@ def admin_required(f):
     return decorated_function
 
 
-def only_blog_author(function):
-    def wrapped_function(*args, **kwargs):
+def blog_owner_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
         post_id = args[0]
         post = BlogPost.query.get(post_id)
         if post.author == current_user:
-            return function(*args, **kwargs)
+            return f(*args, **kwargs)
         return abort(403)
-    return wrapped_function
-
+    return decorated_function()
 
 
 
@@ -238,8 +238,8 @@ def add_new_post():
 
 
 @app.route("/edit-post/<int:post_id>", methods=["GET", "POST"])
-# @admin_required
-@only_blog_author
+@admin_required
+# @blog_owner_required
 def edit_post(post_id):
     post = BlogPost.query.get(post_id)
     edit_form = CreatePostForm(
