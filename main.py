@@ -108,9 +108,10 @@ def blog_owner_required(f):
     def decorated_function(*args, **kwargs):
         post_id = args[0]
         post = BlogPost.query.get(post_id)
-        if post.author == current_user:
-            return f(*args, **kwargs)
-        return abort(403)
+        if post.author != current_user:
+            return abort(403)
+        return f(*args, **kwargs)
+
     return decorated_function
 
 
